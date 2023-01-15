@@ -16,7 +16,7 @@ formEl.addEventListener('submit', submitEvent);
 function submitEvent(evt) {
     evt.preventDefault()
     const { searchQuery
-    } = evt.currentTarget;
+    } = evt.currentTarget.trim();
     console.log(searchQuery.value);
     fetchMake(searchQuery.value).then(resp => {
         
@@ -27,4 +27,9 @@ function submitEvent(evt) {
     })
 }
 
-
+function createMarkup(arr) {
+    const murkup = arr.map(({}) => 
+    ``) 
+        
+    
+}
