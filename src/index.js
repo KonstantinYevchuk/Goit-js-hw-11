@@ -1,11 +1,4 @@
-// async function getUser() {
-//     try {
-//       const response = await axios.get('/user?ID=12345');
-//       console.log(response);
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   }
+
 import Notiflix from 'notiflix';
 const axios = require('axios').default;
 import { fetchMake } from './fetchFhotos';
@@ -16,24 +9,23 @@ const loadBtn = document.querySelector('.load-more')
 formEl.addEventListener('submit', submitEvent);
 
 let page = 1;
+let searchFhoto = '';
 async function submitEvent(evt) {
     evt.preventDefault()
-    
-    const { searchQuery
-    } = evt.currentTarget;
+    searchFhoto = evt.currentTarget.elements.searchQuery.value;
+    // const { searchQuery
+    // } = evt.currentTarget;
     galleryEl.innerHTML = "";
-    // evt.currentTarget.reset();
+    evt.currentTarget.reset();
     // console.log(searchQuery.value);
     try {
-        const resultFetch = await fetchMake(searchQuery.value.trim())
+        const resultFetch = await fetchMake(searchFhoto.trim())
         console.log(resultFetch.hits);
         if(resultFetch.hits.length === 0) {
             Notiflix.Notify.failure('"Sorry, there are no images matching your search query. Please try again."')
         }
-
         createMarkup(resultFetch.hits)
         loadBtn.hidden = false;
-        
     } catch(error) {
      console.log(error);
     }
@@ -42,10 +34,19 @@ async function submitEvent(evt) {
 
 loadBtn.addEventListener('click', clickEvent);
 
-async function clickEvent(evt) {
-    evt = await fetchMake(); 
+async function clickEvent() {
+    page += 1;
+    
+    await fetchMake(searchFhoto, page).then(data => {
+            // console.log(data);
+             createMarkup(data.hits);
+            loadBtn.hidden = false;
+    })
+    .catch(err => {
+        Notiflix.Notify.info("We're sorry, but you've reached the end of search results.")
+        loadBtn.hidden = true;
+    })
 }
-
 
 
 function createMarkup(arr) {
