@@ -18,3 +18,24 @@ body {
   background-color: blue;
   text-align: center;
 }
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+}
+.photo-card {
+  width: 250px;
+}
+.info {
+  display: flex;
+  justify-content: center;
+  font-size: 12px;
+  
+}
+.info-item {
+  font-size: 10px;
+  text-align: center;
+  margin: 0;
+  padding: 10px;
+}
