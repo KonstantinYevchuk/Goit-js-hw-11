@@ -2,6 +2,8 @@
 import Notiflix from 'notiflix';
 const axios = require('axios').default;
 import { fetchMake } from './fetchFhotos';
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 
 const galleryEl = document.querySelector('.gallery');
 const formEl = document.querySelector("#search-form");
@@ -13,46 +15,47 @@ let searchFhoto = '';
 async function submitEvent(evt) {
     evt.preventDefault()
     searchFhoto = evt.currentTarget.elements.searchQuery.value;
-    // const { searchQuery
-    // } = evt.currentTarget;
     galleryEl.innerHTML = "";
     evt.currentTarget.reset();
-    // console.log(searchQuery.value);
-    try {
-        const resultFetch = await fetchMake(searchFhoto.trim())
-        console.log(resultFetch.hits);
-        if(resultFetch.hits.length === 0) {
-            Notiflix.Notify.failure('"Sorry, there are no images matching your search query. Please try again."')
+    
+    await fetchMake(searchFhoto.trim()).then(response => {
+        
+        if(response.length === 0 || searchFhoto === "") {
+            Notiflix.Notify.failure('"Sorry, there are no images matching your search query. Please try again."');
+            loadBtn.hidden = true;
+            return
+            
         }
-        createMarkup(resultFetch.hits)
+        Notiflix.Notify.success(`Hooray! We found totalHits images: ${response.totalHits}`) 
+        createMarkup(response.hits)
         loadBtn.hidden = false;
-    } catch(error) {
-     console.log(error);
-    }
+    })
+    .catch(error => console.log(error))  
     
 }
 
 loadBtn.addEventListener('click', clickEvent);
-
 async function clickEvent() {
     page += 1;
-    
     await fetchMake(searchFhoto, page).then(data => {
             // console.log(data);
              createMarkup(data.hits);
-            loadBtn.hidden = false;
+             loadBtn.hidden = false;
+             
     })
     .catch(err => {
         Notiflix.Notify.info("We're sorry, but you've reached the end of search results.")
         loadBtn.hidden = true;
     })
+
 }
 
 
 function createMarkup(arr) {
     const markup = arr.map(({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) =>  
     `<div class="photo-card">
-    <img src="${webformatURL}" alt="${tags}" loading="lazy" width="250px" height="180px" />
+    <a href="${largeImageURL}" class="gallery_item">
+    <img src="${webformatURL}" alt="${tags}" loading="lazy" width="250px" height="180px" /></a>
     <div class="info">
       <p class="info-item">
         <b>Likes ${likes}</b>
@@ -69,6 +72,23 @@ function createMarkup(arr) {
     </div>
   </div>`).join('');
 
-   galleryEl.insertAdjacentHTML('beforeend', markup);     
-    
+   galleryEl.insertAdjacentHTML('beforeend', markup); 
+//    gallery.refresh()
 }
+// var gallery = new SimpleLightbox('.gallery_item', { 
+//     captionsData: "alt",
+//     captionPosotion: 'bottom',
+//     captionDaley: 250
+//   });
+
+window.addEventListener('scroll', () => {
+    const { height: cardHeight } = document
+    .querySelector(".gallery")
+    .firstElementChild.getBoundingClientRect();
+    
+    window.scrollBy({
+        top: cardHeight * 2,
+        behavior: "smooth",
+      });
+})
+

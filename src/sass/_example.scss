@@ -14,10 +14,24 @@ body {
 img {
   display: block;
 }
+input {
+  background-color: gainsboro;
+  padding: 7px 40px;
+  
+}
+.search {
+  margin-left: 10px;
+  padding: 7px 15px;
+  background-color: rgb(10, 154, 75);
+  color: white;
+  border: 1px solid transparent;
+  border-radius: 2px;
+}
 .search-form {
   padding: 10px 10px;
-  background-color: blue;
+  background-color: rgb(4, 4, 151);
   text-align: center;
+  
 }
 .gallery {
   display: flex;
@@ -30,6 +44,9 @@ img {
 .photo-card {
   width: 250px;
   border: 1px solid grey;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.12), 0px 4px 4px rgba(0, 0, 0, 0.06),
+      1px 4px 6px rgba(0, 0, 0, 0.16);
+    
 }
 .info {
   display: flex;
@@ -44,6 +61,7 @@ img {
   text-align: center;
   margin: 0;
   padding: 10px;
+  color: rgb(4, 4, 151);
 }
 .load-more {
   margin-top: 20px;
