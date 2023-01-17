@@ -40,14 +40,21 @@ async function clickEvent() {
     await fetchMake(searchFhoto, page).then(data => {
             // console.log(data);
              createMarkup(data.hits);
-             loadBtn.hidden = false;
-             
+             loadBtn.hidden = false;       
     })
     .catch(err => {
+        console.log(err);
         Notiflix.Notify.info("We're sorry, but you've reached the end of search results.")
         loadBtn.hidden = true;
     })
-
+    const { height: cardHeight } = document
+    .querySelector(".gallery")
+    .firstElementChild.getBoundingClientRect();
+    
+    window.scrollBy({
+        top: cardHeight * 2,
+        behavior: "smooth",
+      });
 }
 
 
@@ -73,22 +80,22 @@ function createMarkup(arr) {
   </div>`).join('');
 
    galleryEl.insertAdjacentHTML('beforeend', markup); 
-//    gallery.refresh()
+   gallery.refresh()
 }
-// var gallery = new SimpleLightbox('.gallery_item', { 
-//     captionsData: "alt",
-//     captionPosotion: 'bottom',
-//     captionDaley: 250
-//   });
+var gallery = new SimpleLightbox('.gallery_item', { 
+    captionsData: "alt",
+    captionPosotion: 'bottom',
+    captionDaley: 250
+  });
 
-window.addEventListener('scroll', () => {
-    const { height: cardHeight } = document
-    .querySelector(".gallery")
-    .firstElementChild.getBoundingClientRect();
+// window.addEventListener('scroll', () => {
+//     const { height: cardHeight } = document
+//     .querySelector(".gallery")
+//     .firstElementChild.getBoundingClientRect();
     
-    window.scrollBy({
-        top: cardHeight * 2,
-        behavior: "smooth",
-      });
-})
+//     window.scrollBy({
+//         top: cardHeight * 2,
+//         behavior: "smooth",
+//       });
+// })
 
