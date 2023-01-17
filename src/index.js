@@ -21,15 +21,22 @@ async function submitEvent(evt) {
     loadBtn.hidden = true;
     await fetchMake(searchFhoto.trim()).then(response => {
         
-        if(response.length === 0 || searchFhoto === "") {
+        if(response.length === 0 || searchFhoto.trim() === "") {
             Notiflix.Notify.failure('"Sorry, there are no images matching your search query. Please try again."');
             loadBtn.hidden = true;
             return
             
+        } else if(response.hits.length < 40) {
+            loadBtn.hidden = true;
+            Notiflix.Notify.info("We're sorry, it's all that we have on your request.")
+            createMarkup(response.hits)
+        } else {
+            Notiflix.Notify.success(`Hooray! We found totalHits images: ${response.totalHits}`) 
+            createMarkup(response.hits)
+            loadBtn.hidden = false; 
+            console.log(response.hits);
         }
-        Notiflix.Notify.success(`Hooray! We found totalHits images: ${response.totalHits}`) 
-        createMarkup(response.hits)
-        loadBtn.hidden = false;
+        
     })
     .catch(error => console.log(error))  
     
