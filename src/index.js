@@ -14,10 +14,11 @@ let page = 1;
 let searchFhoto = '';
 async function submitEvent(evt) {
     evt.preventDefault()
+    
     searchFhoto = evt.currentTarget.elements.searchQuery.value;
     galleryEl.innerHTML = "";
     evt.currentTarget.reset();
-    
+    loadBtn.hidden = true;
     await fetchMake(searchFhoto.trim()).then(response => {
         
         if(response.length === 0 || searchFhoto === "") {
