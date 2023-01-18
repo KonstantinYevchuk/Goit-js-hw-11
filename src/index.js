@@ -1,6 +1,6 @@
 
 import Notiflix from 'notiflix';
-const axios = require('axios').default;
+// const axios = require('axios').default;
 import { fetchMake } from './fetchFhotos';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
@@ -15,13 +15,17 @@ let searchFhoto = '';
 async function submitEvent(evt) {
     evt.preventDefault()
     
-    searchFhoto = evt.currentTarget.elements.searchQuery.value;
+    searchFhoto = evt.currentTarget.searchQuery.value.trim();
     galleryEl.innerHTML = "";
     evt.currentTarget.reset();
     loadBtn.hidden = true;
-    await fetchMake(searchFhoto.trim()).then(response => {
-        
-        if(response.length === 0 || searchFhoto.trim() === "") {
+    if(searchFhoto.trim() === "") {
+      Notiflix.Notify.failure('"Sorry, there are no images matching your search query. Please try again."');
+      return
+    }
+    await fetchMake(searchFhoto).then(response => {
+  
+        if(response.hits.length === 0) {
             Notiflix.Notify.failure('"Sorry, there are no images matching your search query. Please try again."');
             loadBtn.hidden = true;
             return
@@ -36,25 +40,26 @@ async function submitEvent(evt) {
             loadBtn.hidden = false; 
             console.log(response.hits);
         }
-        
     })
-    .catch(error => console.log(error))  
-    
+    .catch(error => {
+      console.log(error);
+      Notiflix.Notify.failure("Sorry, your request is declined");
+    })     
 }
 
 loadBtn.addEventListener('click', clickEvent);
 async function clickEvent() {
     page += 1;
-    await fetchMake(searchFhoto, page).then(data => {
-            // console.log(data);
-             createMarkup(data.hits);
-             loadBtn.hidden = false;       
-    })
-    .catch(err => {
+    
+    try {
+      const data = await fetchMake(searchFhoto, page);
+      createMarkup(data.hits);
+      loadBtn.hidden = false;
+    } catch(err) {
         console.log(err);
         Notiflix.Notify.info("We're sorry, but you've reached the end of search results.")
         loadBtn.hidden = true;
-    })
+    }
     const { height: cardHeight } = document
     .querySelector(".gallery")
     .firstElementChild.getBoundingClientRect();
@@ -96,14 +101,4 @@ var gallery = new SimpleLightbox('.gallery_item', {
     captionDaley: 250
   });
 
-// window.addEventListener('scroll', () => {
-//     const { height: cardHeight } = document
-//     .querySelector(".gallery")
-//     .firstElementChild.getBoundingClientRect();
-    
-//     window.scrollBy({
-//         top: cardHeight * 2,
-//         behavior: "smooth",
-//       });
-// })
 

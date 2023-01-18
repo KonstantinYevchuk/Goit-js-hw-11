@@ -5,14 +5,16 @@ body {
   background-color: #fff;
   color: #2f2f37;
   max-width: 1200px;
-  padding: 16px;
   font-size: 16px;
   font-weight: 700;
   text-align: center;
+  margin-left: auto;
+  margin-right: auto;
   
 }
 img {
   display: block;
+  width: 100%;
 }
 input {
   background-color: gainsboro;
@@ -31,18 +33,19 @@ input {
   padding: 10px 10px;
   background-color: rgb(4, 4, 151);
   text-align: center;
+  width: 100%;
   
 }
 .gallery {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
-  justify-content: center;
+  justify-content: space-between;
   // align-items: center;
   // align-content: center;
 }
 .photo-card {
-  width: 250px;
+  width: 280px;
   border: 1px solid grey;
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.12), 0px 4px 4px rgba(0, 0, 0, 0.06),
       1px 4px 6px rgba(0, 0, 0, 0.16);

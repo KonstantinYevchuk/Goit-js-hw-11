@@ -7,10 +7,7 @@ async function fetchMake(name, page = 1) {
     const KEY = '32830280-cd5d8cae887a4565b5001e89e';
     try {
         const response = await axios.get(`${BASE_URL}?key=${KEY}&q=${name}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`);
-        if(!response.status) {
-        throw new Error(response.statusText)
-    }
-    const resp = await response.data;
+        const resp = await response.data;
     return resp
     
     } catch(err) {
