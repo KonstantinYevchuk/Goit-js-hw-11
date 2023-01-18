@@ -19,7 +19,7 @@ async function submitEvent(evt) {
     galleryEl.innerHTML = "";
     evt.currentTarget.reset();
     loadBtn.hidden = true;
-    if(searchFhoto.trim() === "") {
+    if(searchFhoto === "") {
       Notiflix.Notify.failure('"Sorry, there are no images matching your search query. Please try again."');
       return
     }
